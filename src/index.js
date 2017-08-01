@@ -9,6 +9,7 @@ import moment from 'moment';
 import 'moment-range';
 
 type DatesType = {
+  customStyle?: ?StyleSheet,
   range: boolean,
   date: ?moment,
   startDate: ?moment,
@@ -20,6 +21,7 @@ type DatesType = {
 }
 
 type MonthType = {
+  customStyle?: ?StyleSheet,
   range: boolean,
   date: ?moment,
   startDate: ?moment,
@@ -33,6 +35,7 @@ type MonthType = {
 }
 
 type WeekType = {
+  style?: StyleSheet,
   range: boolean,
   date: ?moment,
   startDate: ?moment,
@@ -109,6 +112,7 @@ const dates = (startDate: ?moment, endDate: ?moment, focusedInput: 'startDate' |
 
 export const Week = (props: WeekType) => {
   const {
+    customStyle,
     range,
     date,
     startDate,
@@ -157,16 +161,23 @@ export const Week = (props: WeekType) => {
     const isBlocked = isDateBlocked(day);
     const isSelected = isDateSelected();
 
+    const dayBlockedStyle = (customStyle && customStyle.dayBlocked) ? customStyle.dayBlocked : styles.dayBlocked;
+    const daySelectedStyle = (customStyle && customStyle.daySelected) ? customStyle.daySelected : styles.daySelected;
+    const dayDisabledTextStyle = (customStyle && customStyle.dayDisabledText) ? customStyle.dayDisabledText : styles.dayDisabledText;
+    const daySelectedTextStyle = (customStyle && customStyle.daySelectedText) ? customStyle.daySelectedText : styles.daySelectedText;
+
     const style = [
       styles.day,
-      isBlocked && styles.dayBlocked,
-      isSelected && styles.daySelected
+      customStyle && customStyle.day,
+      isBlocked && dayBlockedStyle,
+      isSelected && daySelectedStyle
     ];
 
     const styleText = [
       styles.dayText,
-      isBlocked && styles.dayDisabledText,
-      isSelected && styles.daySelectedText
+      customStyle && customStyle.dayText,
+      isBlocked && dayDisabledTextStyle,
+      isSelected && daySelectedTextStyle
     ];
 
     days.push(
@@ -182,12 +193,13 @@ export const Week = (props: WeekType) => {
   });
 
   return (
-    <View style={styles.week}>{days}</View>
+    <View style={[styles.week, customStyle && customStyle.week]}>{days}</View>
   );
 };
 
 export const Month = (props: MonthType) => {
   const {
+    customStyle,
     range,
     date,
     startDate,
@@ -208,8 +220,8 @@ export const Month = (props: MonthType) => {
 
   weekRange.by('days', (day: moment) => {
     dayNames.push(
-      <Text key={day.date()} style={styles.dayName}>
-        {day.format('ddd')}
+      <Text key={day.date()} style={[styles.dayName, customStyle && customStyle.dayName]}>
+        {day.format('dd')}
       </Text>
     );
   });
@@ -217,6 +229,7 @@ export const Month = (props: MonthType) => {
   moment.range(startOfMonth, endOfMonth).by('weeks', (week: moment) => {
     weeks.push(
       <Week
+        customStyle={customStyle}
         key={week}
         range={range}
         date={date}
@@ -234,8 +247,8 @@ export const Month = (props: MonthType) => {
   });
 
   return (
-    <View style={styles.month}>
-      <View style={styles.week}>
+    <View style={[styles.month, customStyle && customStyle.month]}>
+      <View style={[styles.week, customStyle && customStyle.week]}>
         {dayNames}
       </View>
       {weeks}
