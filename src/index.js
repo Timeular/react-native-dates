@@ -15,6 +15,7 @@ type DatesType = {
   startDate: ?moment,
   endDate: ?moment,
   focusedInput: 'startDate' | 'endDate',
+  blockRangeWhenBlockedDateInPeriod?: boolean,
   onDatesChange: (date: { date?: ?moment, startDate?: ?moment, endDate?: ?moment }) => void,
   isDateBlocked: (date: moment) => boolean,
   onDisableClicked: (date: moment) => void
@@ -29,6 +30,7 @@ type MonthType = {
   focusedInput: 'startDate' | 'endDate',
   currentDate: moment,
   focusedMonth: moment,
+  blockRangeWhenBlockedDateInPeriod?: boolean,
   onDatesChange: (date: { date?: ?moment, startDate?: ?moment, endDate?: ?moment }) => void,
   isDateBlocked: (date: moment) => boolean,
   onDisableClicked: (date: moment) => void
@@ -42,6 +44,7 @@ type WeekType = {
   endDate: ?moment,
   focusedInput: 'startDate' | 'endDate',
   startOfWeek: moment,
+  blockRangeWhenBlockedDateInPeriod?: boolean,
   onDatesChange: (date: { date?: ?moment, startDate?: ?moment, endDate?: ?moment }) => void,
   isDateBlocked: (date: moment) => boolean,
   onDisableClicked: (date: moment) => void
@@ -119,6 +122,7 @@ export const Week = (props: WeekType) => {
     endDate,
     focusedInput,
     startOfWeek,
+    blockRangeWhenBlockedDateInPeriod,
     onDatesChange,
     isDateBlocked,
     onDisableClicked
@@ -135,7 +139,7 @@ export const Week = (props: WeekType) => {
         let isPeriodBlocked = false;
         const start = focusedInput === 'startDate' ? day : startDate;
         const end = focusedInput === 'endDate' ? day : endDate;
-        if (start && end) {
+        if (start && end && blockRangeWhenBlockedDateInPeriod) {
           moment.range(start, end).by('days', (dayPeriod: moment) => {
             if (isDateBlocked(dayPeriod)) isPeriodBlocked = true;
           });
@@ -207,6 +211,7 @@ export const Month = (props: MonthType) => {
     focusedInput,
     currentDate,
     focusedMonth,
+    blockRangeWhenBlockedDateInPeriod,
     onDatesChange,
     isDateBlocked,
     onDisableClicked
@@ -239,6 +244,7 @@ export const Month = (props: MonthType) => {
         currentDate={currentDate}
         focusedMonth={focusedMonth}
         startOfWeek={week}
+        blockRangeWhenBlockedDateInPeriod={blockRangeWhenBlockedDateInPeriod}
         onDatesChange={onDatesChange}
         isDateBlocked={isDateBlocked}
         onDisableClicked={onDisableClicked}
@@ -291,6 +297,7 @@ export default class Dates extends Component {
           focusedInput={this.props.focusedInput}
           currentDate={this.state.currentDate}
           focusedMonth={this.state.focusedMonth}
+          blockRangeWhenBlockedDateInPeriod={this.props.blockRangeWhenBlockedDateInPeriod}
           onDatesChange={this.props.onDatesChange}
           isDateBlocked={this.props.isDateBlocked}
           onDisableClicked={this.props.onDisableClicked}
