@@ -162,26 +162,38 @@ export const Week = (props: WeekType) => {
       return date && day.isSame(date);
     };
 
+    const isRangeBoundaryDay = () => {
+      if (range) {
+        return (startDate && day.isSame(startDate, 'day')) || (endDate && day.isSame(endDate, 'day'));
+      }
+      return date && day.isSame(date, 'day');
+    };
+
     const isBlocked = isDateBlocked(day);
     const isSelected = isDateSelected();
+    const isRangeBoundary = isRangeBoundaryDay();
 
     const dayBlockedStyle = (customStyle && customStyle.dayBlocked) ? customStyle.dayBlocked : styles.dayBlocked;
     const daySelectedStyle = (customStyle && customStyle.daySelected) ? customStyle.daySelected : styles.daySelected;
+    const dayRangeBoundaryStyle = (customStyle && customStyle.dayRangeBoundary) ? customStyle.dayRangeBoundary : styles.dayRangeBoundary;
     const dayDisabledTextStyle = (customStyle && customStyle.dayDisabledText) ? customStyle.dayDisabledText : styles.dayDisabledText;
     const daySelectedTextStyle = (customStyle && customStyle.daySelectedText) ? customStyle.daySelectedText : styles.daySelectedText;
+    const dayRangeBoundaryTextStyle = (customStyle && customStyle.dayRangeBoundaryText) ? customStyle.dayRangeBoundaryText : styles.dayRangeBoundaryText;
 
     const style = [
       styles.day,
       customStyle && customStyle.day,
-      isBlocked && dayBlockedStyle,
-      isSelected && daySelectedStyle
+      isSelected && daySelectedStyle,
+      isRangeBoundary && dayRangeBoundaryStyle,
+      isBlocked && dayBlockedStyle
     ];
 
     const styleText = [
       styles.dayText,
       customStyle && customStyle.dayText,
-      isBlocked && dayDisabledTextStyle,
-      isSelected && daySelectedTextStyle
+      isSelected && daySelectedTextStyle,
+      isRangeBoundary && dayRangeBoundaryTextStyle,
+      isBlocked && dayDisabledTextStyle
     ];
 
     days.push(
