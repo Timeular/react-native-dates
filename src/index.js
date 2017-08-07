@@ -247,7 +247,7 @@ export const Month = (props: MonthType) => {
     weeks.push(
       <Week
         customStyle={customStyle}
-        key={week}
+        key={`${focusedMonth.format()}${week.format()}`}
         range={range}
         date={date}
         startDate={startDate}
