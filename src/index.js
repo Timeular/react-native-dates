@@ -8,10 +8,9 @@ import {
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
-const moment = extendMoment(Moment)
+const moment = extendMoment(Moment);
 
 type DatesType = {
-  customStyle?: ?StyleSheet,
   range: boolean,
   date: ?moment,
   startDate: ?moment,
@@ -133,7 +132,7 @@ export const Week = (props: WeekType) => {
   const days = [];
   const endOfWeek = startOfWeek.clone().endOf('isoweek');
 
-  moment.range(startOfWeek, endOfWeek).by('days', (day: moment) => {
+  Array.from(moment.range(startOfWeek, endOfWeek).by('days')).map((day: moment) => {
     const onPress = () => {
       if (isDateBlocked(day)) {
         onDisableClicked(day);
@@ -142,7 +141,7 @@ export const Week = (props: WeekType) => {
         const start = focusedInput === 'startDate' ? day : startDate;
         const end = focusedInput === 'endDate' ? day : endDate;
         if (start && end && blockRangeWhenBlockedDateInPeriod) {
-          moment.range(start, end).by('days', (dayPeriod: moment) => {
+          Array.from(moment.range(start, end).by('days')).map((dayPeriod: moment) => {
             if (isDateBlocked(dayPeriod)) isPeriodBlocked = true;
           });
         }
@@ -237,15 +236,15 @@ export const Month = (props: MonthType) => {
   const endOfMonth = focusedMonth.clone().endOf('month');
   const weekRange = moment.range(currentDate.clone().startOf('isoweek'), currentDate.clone().endOf('isoweek'));
 
-  weekRange.by('days', (day: moment) => {
+  Array.from(weekRange.by('days')).map((day: moment) => {
     dayNames.push(
       <Text key={day.date()} style={[styles.dayName, customStyle && customStyle.dayName]}>
         {day.format('dd')}
       </Text>
-    );
+      );
   });
 
-  moment.range(startOfMonth, endOfMonth).by('weeks', (week: moment) => {
+  Array.from(moment.range(startOfMonth, endOfMonth).by('weeks')).map((week: moment) => {
     weeks.push(
       <Week
         customStyle={customStyle}
@@ -263,7 +262,7 @@ export const Month = (props: MonthType) => {
         isDateBlocked={isDateBlocked}
         onDisableClicked={onDisableClicked}
       />
-    );
+      );
   });
 
   return (
