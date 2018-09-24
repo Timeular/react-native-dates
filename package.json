@@ -27,12 +27,12 @@
   },
   "homepage": "https://github.com/werein/react-native-dates#readme",
   "dependencies": {
-    "moment": "^2.22.2",
-    "moment-range": "2.2.0"
+    "moment": "2.22.2",
+    "moment-range": "4.0.1"
   },
   "peerDependencies": {
-    "react": "^15.3.2",
-    "react-native": "^0.35.0"
+    "react": "^16.5.0",
+    "react-native": "^0.57.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
